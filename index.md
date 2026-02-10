@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Effective Date: February 10, 2026**
+**Effective Date: February 11, 2026**
 
 This privacy policy applies to the **Noise Alert** app (hereby referred to as "Application") for Android mobile devices that was created by Noise Alert Team (hereby referred to as "Service Provider") as a Free service. This service is intended for use "AS IS".
 
@@ -44,6 +44,15 @@ To improve app stability, the Application uses Firebase Crashlytics to collect a
 - Crash stack traces
 
 This data is **anonymous** and cannot be used to identify you personally.
+
+### Firebase Analytics
+
+The Application uses Firebase Analytics to collect anonymous usage statistics, including:
+- App opens and session duration
+- Screen views
+- Basic device information (device model, OS version)
+
+This data helps us understand how the app is used and improve user experience. **No personally identifiable information is collected.** Data is processed in accordance with [Google's Privacy Policy](https://policies.google.com/privacy).
 
 ### Google AdMob (Free Version Only)
 
@@ -104,7 +113,7 @@ This Application does not collect any location information.
 
 ## Third-Party Data Sharing
 
-The Application does not collect or share personal information. Anonymous data collected by third-party services (Firebase Crashlytics, AdMob, Google Play Billing) is processed by Google in accordance with [Google's Privacy Policy](https://policies.google.com/privacy).
+The Application does not collect or share personal information. Anonymous data collected by third-party services (Firebase Crashlytics, Firebase Analytics, AdMob, Google Play Billing) is processed by Google in accordance with [Google's Privacy Policy](https://policies.google.com/privacy).
 
 ## Data Retention
 
@@ -133,7 +142,7 @@ The Service Provider is committed to protecting your information. Since the Appl
 
 ## Hearing Safety Disclaimer
 
-The Application provides alert sounds to notify you of high noise levels. By default, alert volume is limited to **70%** to protect your hearing.
+The Application provides alert sounds to notify you of high noise levels. By default, alert volume is set to **50%** with a normal maximum of **100%**.
 
 ### Override Alert Volume Limiter
 
