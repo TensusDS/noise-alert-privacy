@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Effective Date: February 11, 2026**
+**Effective Date: February 21, 2026**
 
 This privacy policy applies to the **Noise Alert** app (hereby referred to as "Application") for Android mobile devices that was created by Noise Alert Team (hereby referred to as "Service Provider") as a Free service. This service is intended for use "AS IS".
 
@@ -21,6 +21,9 @@ Noise monitoring sessions are stored locally on your device only. This data is n
 - Noise dose calculations for occupational compliance
 - Frequency weighting method used (A-weighting, C-weighting, or Z-weighting)
 - Compliance mode settings (EU, OSHA, NIOSH, UK, Australia standards)
+- Device model and audio source
+- User-defined tags (free-text labels for session identification)
+- Location data (if enabled) — latitude, longitude, and location name
 
 ### Device and Calibration Data
 
@@ -91,6 +94,16 @@ The Application supports Android Auto Backup, which can automatically back up yo
 
 When enabled, backup data is encrypted and stored in your personal Google Drive, not on our servers. See [Google's Backup documentation](https://support.google.com/android/answer/2819582) for details.
 
+## Data Export
+
+The Application allows you to export your monitoring sessions as PDF reports or CSV data files.
+
+- **Local generation:** All exports are generated entirely on your device — no data is uploaded to any server
+- **Sharing:** Exports are shared via Android's standard share sheet (email, messaging apps, cloud storage). Once shared, the data is subject to the recipient's privacy practices
+- **Location in exports:** A separate setting ("Include location in exports") controls whether location data appears in exported files. When enabled, both PDF and CSV exports include full-precision coordinates regardless of the anonymization setting
+- **Export format:** CSV files use RFC 4180 format with UTF-8 encoding for compatibility with spreadsheet applications
+- **Free tier limits:** 3 exports per week. Premium tier: unlimited exports
+
 ## Free and Premium Tiers
 
 The Application offers both Free and Premium tiers with different data policies:
@@ -109,7 +122,19 @@ The Application offers both Free and Premium tiers with different data policies:
 
 ## Location Information
 
-This Application does not collect any location information.
+The Application offers an **optional** GPS location tagging feature that captures your location when starting a noise monitoring session. This feature is **disabled by default** and requires your explicit consent.
+
+### How location data works:
+- **Opt-in only:** You must enable location tagging in Settings and grant the Android location permission. An additional in-app consent dialog is shown before any location data is collected
+- **Precise (GPS) location:** The Application requests precise location access (`ACCESS_FINE_LOCATION`) to provide accurate session geolocation. Raw GPS coordinates can have accuracy up to approximately 10 meters
+- **Per-session capture:** Location is recorded **once** at session start using the device's last known location — there is no continuous or background tracking
+- **Anonymization option:** You can enable coordinate anonymization in Settings, which rounds GPS coordinates to approximately 111-meter accuracy. Without anonymization, full-precision coordinates are stored
+- **On-device processing:** Reverse geocoding (converting coordinates to a human-readable location name such as city and street) is performed locally on your device using Android's built-in Geocoder service — no external API calls are made
+- **Local storage only:** Location data is stored exclusively on your device in an encrypted database — it is never transmitted to any server
+- **Export control:** A separate setting controls whether location data is included in PDF/CSV exports. Note that both PDF and CSV exports include full-precision coordinates when location is present, regardless of the storage anonymization setting
+- **No background tracking:** The Application never accesses your location in the background or between sessions
+
+You can disable location tagging at any time in Settings. Previously captured location data is deleted when the associated session is deleted.
 
 ## Third-Party Data Sharing
 
@@ -138,7 +163,16 @@ The Application is not directed to children under the age of 13. We do not knowi
 
 ## Security
 
-The Service Provider is committed to protecting your information. Since the Application processes audio locally and does not transmit personal data, there is minimal risk of unauthorized access to your information.
+The Service Provider is committed to protecting your information through multiple layers of security:
+
+- **Local-first design:** All noise measurement data is processed and stored exclusively on your device
+- **Database encryption:** Session data is encrypted at rest using SQLCipher (AES-256-CBC with HMAC-SHA512 page-level verification)
+- **Hardware-backed key storage:** Encryption keys are protected by the Android Keystore system, utilizing hardware security modules (TEE or StrongBox) when available on your device
+- **Settings integrity:** Safety-critical settings (noise thresholds, calibration values) are protected by HMAC-SHA256 integrity verification to detect unauthorized modifications
+- **No cleartext traffic:** The Application does not permit unencrypted network connections
+- **Code protection:** Release builds use R8 code obfuscation and resource shrinking
+
+Since the Application processes audio locally and does not transmit personal data to our servers, there is minimal risk of unauthorized access to your noise monitoring information.
 
 ## Hearing Safety Disclaimer
 
