@@ -84,9 +84,10 @@ Purchase history is managed by Google Play. See [Google Play's Terms of Service]
 The Application supports Android Auto Backup, which can automatically back up your app data to your personal Google Drive account. This is an **optional** Android system feature.
 
 ### What may be backed up:
-- Session history and statistics
 - App settings and preferences
 - Calibration data
+
+**Note:** Session history is stored in an encrypted database (SQLCipher) and is NOT included in cloud backups. Encryption keys are device-specific and cannot be transferred between devices.
 
 ### How to control:
 - **Disable in app:** Settings → Cloud Backup → Off
@@ -150,6 +151,7 @@ The Application does not collect or share personal information. Anonymous data c
 
 ### Third-Party Services
 - **Crash reports (Firebase Crashlytics):** Retained for 90 days
+- **Analytics data (Firebase Analytics):** 2 months (default retention period)
 - **Advertising data (AdMob):** Subject to Google Ads data retention policies
 - **Purchase records (Google Play Billing):** Managed by Google Play
 
