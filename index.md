@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Effective Date: February 21, 2026**
+**Effective Date: February 24, 2026**
 
 This privacy policy applies to the **Noise Alert** app (hereby referred to as "Application") for Android mobile devices that was created by Noise Alert Team (hereby referred to as "Service Provider") as a Free service. This service is intended for use "AS IS".
 
@@ -17,13 +17,19 @@ The Application uses your device's microphone to measure ambient noise levels in
 Noise monitoring sessions are stored locally on your device only. This data is never uploaded or shared. Session data includes:
 - Session duration, start and end times
 - Minimum, maximum, and average decibel levels
-- Peak sound levels (LCpeak measurements)
+- Peak sound levels — unweighted (Lpeak), A-weighted (LApeak), and C-weighted (LCpeak)
 - Noise dose calculations for occupational compliance
 - Frequency weighting method used (A-weighting, C-weighting, or Z-weighting)
 - Compliance mode settings (EU, OSHA, NIOSH, UK, Australia standards)
 - Device model and audio source
 - User-defined tags (free-text labels for session identification)
 - Location data (if enabled) — latitude, longitude, and location name
+- Hearing protection device settings (if enabled) — HPD active state and SNR attenuation value
+- Location anonymization state (whether coordinates were stored at full or reduced precision)
+- Alert trigger count and threshold snapshots at time of recording
+- Audio clipping event count
+- Sample count and audio sample rate
+- Individual timestamped noise readings recorded at each measurement interval, including per-reading decibel levels, alert flags, and peak measurements
 
 ### Device and Calibration Data
 
@@ -34,6 +40,18 @@ To ensure measurement accuracy, the Application stores the following device-spec
 - Calibration method (factory default, reference device, or manual)
 
 This data is used solely for accurate noise level calculations and is never transmitted externally.
+
+### Notifications
+
+On Android 13 and above, the Application requests the notification permission (`POST_NOTIFICATIONS`) to display:
+- **Foreground service notification:** Required by Android to keep the noise monitoring service running in the background
+- **Threshold alert notifications:** Alerts when noise levels exceed your configured thresholds
+
+You can revoke notification permission at any time in Android Settings. Without it, the app cannot run background monitoring.
+
+### Battery Optimization
+
+To ensure reliable background monitoring, the Application may guide you to disable battery optimization in Android Settings. This prevents the system from stopping noise monitoring during active sessions. You can re-enable battery optimization at any time in **Android Settings → Battery → Battery Optimization**.
 
 ## Third-Party Services
 
@@ -59,7 +77,7 @@ This data helps us understand how the app is used and improve user experience. *
 
 ### Google AdMob (Free Version Only)
 
-The free version of the Application displays rewarded advertisements via Google AdMob. AdMob may collect:
+The free version of the Application displays banner and rewarded video advertisements via Google AdMob. AdMob may collect:
 - Advertising ID (resettable device identifier)
 - Device information (model, OS version)
 - Ad interaction data (impressions, clicks)
@@ -72,12 +90,21 @@ You can control personalized advertising in your Android device settings:
 
 ### Google Play Billing
 
-The Application uses Google Play Billing for in-app purchases (Premium subscription). When you make a purchase:
+The Application uses Google Play Billing for in-app purchases (one-time Premium upgrade). When you make a purchase:
 - Google processes your payment information directly
-- The Application receives only purchase tokens and order IDs to verify your subscription status
+- The Application receives only purchase tokens and order IDs to verify your purchase status
 - No payment details (credit card numbers, billing address) are ever seen or stored by the Application
 
 Purchase history is managed by Google Play. See [Google Play's Terms of Service](https://play.google.com/about/play-terms/) for details.
+
+### Google Play In-App Review
+
+The Application may prompt you to rate it via Google Play's In-App Review API.
+When the review dialog is shown, the Google Play SDK communicates with Google servers
+to check review eligibility (e.g., whether you have recently been prompted).
+No personal data from the Application is transmitted to Google in this process —
+only standard app and device identifiers used by Google Play.
+See [Google Play's Terms of Service](https://play.google.com/about/play-terms/) for details.
 
 ## Cloud Backup (Optional)
 
@@ -95,13 +122,19 @@ The Application supports Android Auto Backup, which can automatically back up yo
 
 When enabled, backup data is encrypted and stored in your personal Google Drive, not on our servers. See [Google's Backup documentation](https://support.google.com/android/answer/2819582) for details.
 
+### Device-to-Device Transfer
+
+When setting up a new Android device, the system may transfer app data from your old device.
+The same inclusion/exclusion rules as Cloud Backup apply: app settings and preferences may be transferred,
+but the encrypted session database and encryption keys are excluded.
+
 ## Data Export
 
 The Application allows you to export your monitoring sessions as PDF reports or CSV data files.
 
 - **Local generation:** All exports are generated entirely on your device — no data is uploaded to any server
 - **Sharing:** Exports are shared via Android's standard share sheet (email, messaging apps, cloud storage). Once shared, the data is subject to the recipient's privacy practices
-- **Location in exports:** A separate setting ("Include location in exports") controls whether location data appears in exported files. When enabled, both PDF and CSV exports include full-precision coordinates regardless of the anonymization setting
+- **Location in exports:** A separate setting ("Include location in exports") controls whether location data appears in exported files. When enabled, both PDF and CSV exports include coordinates as stored at session time — full precision if anonymization was disabled, or approximately 111-meter accuracy if anonymization was enabled during recording
 - **Export format:** CSV files use RFC 4180 format with UTF-8 encoding for compatibility with spreadsheet applications
 - **Free tier limits:** 3 exports per week. Premium tier: unlimited exports
 
@@ -130,16 +163,16 @@ The Application offers an **optional** GPS location tagging feature that capture
 - **Precise (GPS) location:** The Application requests precise location access (`ACCESS_FINE_LOCATION`) to provide accurate session geolocation. Raw GPS coordinates can have accuracy up to approximately 10 meters
 - **Per-session capture:** Location is recorded **once** at session start using the device's last known location — there is no continuous or background tracking
 - **Anonymization option:** You can enable coordinate anonymization in Settings, which rounds GPS coordinates to approximately 111-meter accuracy. Without anonymization, full-precision coordinates are stored
-- **On-device processing:** Reverse geocoding (converting coordinates to a human-readable location name such as city and street) is performed locally on your device using Android's built-in Geocoder service — no external API calls are made
+- **On-device processing:** Reverse geocoding (converting coordinates to a human-readable location name) uses Android's built-in Geocoder API. On most devices with Google Play Services, this may involve a request to Google's geocoding service. Only the session-start coordinates are sent — no audio, noise measurements, or other app data is transmitted in this process
 - **Local storage only:** Location data is stored exclusively on your device in an encrypted database — it is never transmitted to any server
-- **Export control:** A separate setting controls whether location data is included in PDF/CSV exports. Note that both PDF and CSV exports include full-precision coordinates when location is present, regardless of the storage anonymization setting
+- **Export control:** A separate setting controls whether location data is included in PDF/CSV exports. Note that exports include coordinates as stored at session time: full precision if anonymization was disabled during recording, or approximately 111-meter accuracy if anonymization was enabled. A "Location Privacy" label in each export indicates the precision level
 - **No background tracking:** The Application never accesses your location in the background or between sessions
 
 You can disable location tagging at any time in Settings. Previously captured location data is deleted when the associated session is deleted.
 
 ## Third-Party Data Sharing
 
-The Application does not collect or share personal information. Anonymous data collected by third-party services (Firebase Crashlytics, Firebase Analytics, AdMob, Google Play Billing) is processed by Google in accordance with [Google's Privacy Policy](https://policies.google.com/privacy).
+The Application does not collect or share personal information. Anonymous data collected by third-party services (Firebase Crashlytics, Firebase Analytics, AdMob, Google Play Billing, Google Play In-App Review) is processed by Google in accordance with [Google's Privacy Policy](https://policies.google.com/privacy).
 
 ## Data Retention
 
