@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Effective Date: February 24, 2026**
+**Effective Date: February 28, 2026**
 
 This privacy policy applies to the **Noise Alert** app (hereby referred to as "Application") for Android mobile devices that was created by Noise Alert Team (hereby referred to as "Service Provider") as a Free service. This service is intended for use "AS IS".
 
@@ -29,6 +29,7 @@ Noise monitoring sessions are stored locally on your device only. This data is n
 - Alert trigger count and threshold snapshots at time of recording
 - Audio clipping event count
 - Sample count and audio sample rate
+- Adaptive sampling tier transitions (internal quality metadata for measurement accuracy)
 - Individual timestamped noise readings recorded at each measurement interval, including per-reading decibel levels, alert flags, and peak measurements
 
 ### Device and Calibration Data
@@ -48,6 +49,14 @@ On Android 13 and above, the Application requests the notification permission (`
 - **Threshold alert notifications:** Alerts when noise levels exceed your configured thresholds
 
 You can revoke notification permission at any time in Android Settings. Without it, the app cannot run background monitoring.
+
+### Camera (Flashlight)
+
+The Application can optionally use your device's camera flash (LED) as a visual alert when noise exceeds your threshold. This feature:
+- Uses only the camera flash LED — the camera itself is never activated
+- No photos or videos are taken
+- Must be enabled manually in Settings
+- Uses Android's `CameraManager` API for torch control only
 
 ### Battery Optimization
 
@@ -90,7 +99,7 @@ You can control personalized advertising in your Android device settings:
 
 ### Google Play Billing
 
-The Application uses Google Play Billing for in-app purchases (one-time Premium upgrade). When you make a purchase:
+The Application uses Google Play Billing for in-app purchases (one-time lifetime Premium upgrade). When you make a purchase:
 - Google processes your payment information directly
 - The Application receives only purchase tokens and order IDs to verify your purchase status
 - No payment details (credit card numbers, billing address) are ever seen or stored by the Application
@@ -156,7 +165,7 @@ The Application offers both Free and Premium tiers with different data policies:
 
 ## Location Information
 
-The Application offers an **optional** GPS location tagging feature that captures your location when starting a noise monitoring session. This feature is **disabled by default** and requires your explicit consent.
+The Application offers an **optional** GPS location tagging feature that captures your location when starting a noise monitoring session. This feature requires your **explicit consent** before any location data is collected. A consent dialog is shown the first time you start monitoring with location tagging enabled.
 
 ### How location data works:
 - **Opt-in only:** You must enable location tagging in Settings and grant the Android location permission. An additional in-app consent dialog is shown before any location data is collected
