@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Effective Date: February 28, 2026**
+**Effective Date: May 16, 2026**
 
 This privacy policy applies to the **Noise Alert** app (hereby referred to as "Application") for Android mobile devices that was created by Noise Alert Team (hereby referred to as "Service Provider") as a Free service. This service is intended for use "AS IS".
 
@@ -97,6 +97,25 @@ You can control personalized advertising in your Android device settings:
 
 **Note:** The Premium version of the Application contains no advertising and does not use AdMob.
 
+### Ad and Analytics Consent (EU/EEA, UK, Switzerland)
+
+For users located in the European Economic Area, the United Kingdom, and Switzerland, the Application uses **Google's User Messaging Platform (UMP)** — a Google-certified IAB TCF v2.2 Consent Management Platform — to obtain GDPR/DMA-compliant consent **before** any analytics events are sent or any advertising is loaded.
+
+**On first launch in a regulated region**, a Google-rendered consent form appears. The form lets you:
+- Grant or deny consent for personalized advertising
+- Grant or deny consent for analytics measurement
+- Review the list of advertising vendors (currently: Google AdMob)
+
+**The Application's behaviour reflects your choice exactly:**
+- **If you grant consent:** Firebase Analytics begins collecting anonymous usage data; AdMob may serve personalized ads
+- **If you deny consent:** No analytics events are sent; the banner ad area collapses to zero height; the rewarded-ad option is disabled with an explanation. We **do not** fall back to non-personalized ads — denying means no ads at all (per the Application's "transparency over revenue" principle)
+- **If you are outside the regulated region:** The form is not shown; analytics and ads operate as described above
+- **If the consent backend is unreachable** (offline launch): The Application proceeds with analytics and ads disabled until consent can be resolved on a later launch (fail-closed behaviour)
+
+**You can change your choice at any time** via the **Privacy options** entry in the navigation drawer's Legal section. This entry is visible only to users in regulated regions.
+
+This Application uses Google's Consent Mode v2 — analytics and ads SDKs receive your consent decision and adjust their behaviour accordingly. See [Google's User Messaging Platform documentation](https://developers.google.com/admob/android/privacy) and [Google's certified CMP overview](https://support.google.com/admanager/answer/13554116) for technical details.
+
 ### Google Play Billing
 
 The Application uses Google Play Billing for in-app purchases (one-time lifetime Premium upgrade). When you make a purchase:
@@ -165,23 +184,42 @@ The Application offers both Free and Premium tiers with different data policies:
 
 ## Location Information
 
-The Application offers an **optional** GPS location tagging feature that captures your location when starting a noise monitoring session. This feature requires your **explicit consent** before any location data is collected. A consent dialog is shown the first time you start monitoring with location tagging enabled.
+The Application offers an **optional** location tagging feature that captures your location when starting a noise monitoring session. This feature requires your **explicit consent** before any location data is collected. A consent dialog is shown the first time you start monitoring with location tagging enabled.
+
+### Three location modes — you choose which Android permission is requested
+
+In line with [Google Play's Location Permissions policy](https://support.google.com/googleplay/android-developer/answer/9799150) (effective April 15, 2026), the Application requests **only the minimum location scope** that matches your in-app choice. The consent dialog and the Settings screen offer three modes, each mapped to a specific Android runtime permission:
+
+| Your choice in the dialog / Settings | Android permission requested | Captured precision |
+|--------------------------------------|------------------------------|--------------------|
+| **Approximate** (recommended) | `ACCESS_COARSE_LOCATION` | Network/cell-based, approximately 1–3 km |
+| **Precise** | `ACCESS_FINE_LOCATION` | GPS, approximately 5 m |
+| **Don't share** | None — no permission requested | No coordinates captured |
+
+Both `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCATION` are declared in the Android manifest, but the Application **never requests `ACCESS_FINE_LOCATION` unless you explicitly chose "Precise"**. You can change your choice at any time in **Settings → Save location → Location precision**, and you can revoke the permission entirely from the Android system settings.
+
+### App-level toggle vs Android system permission
+
+Turning **Save location** off in Settings stops the Application from collecting, processing, or storing location immediately and persistently — no future session will record location while the toggle is off. This satisfies the data-minimization (GDPR Art. 5) and right-to-withdraw (GDPR Art. 7(3)) principles by halting *processing*.
+
+Following the Android industry baseline (used by Google Photos, Strava, Komoot, and other location-aware apps), the **system-level permission grant remains in place** until you revoke it through Android Settings. The in-app toggle controls whether the Application *uses* the permission; the OS controls whether the grant *exists*. To make this distinction visible, the Settings screen shows a transparency hint with an "Open Settings" shortcut whenever the toggle is off but Android still has the location permission granted.
+
+To fully revoke the OS-level grant, navigate to **Android Settings → Apps → Noise Alert → Permissions → Location → Don't allow**, or tap the in-app shortcut. The Application does not auto-revoke its own permission via `Context.revokeSelfPermissionsOnKill` because that API requires the app process to be killed (which looks like a crash to the user) and is unavailable on Android 12 and below; stopping processing is a non-disruptive, equally-protective alternative.
 
 ### How location data works:
-- **Opt-in only:** You must enable location tagging in Settings and grant the Android location permission. An additional in-app consent dialog is shown before any location data is collected
-- **Precise (GPS) location:** The Application requests precise location access (`ACCESS_FINE_LOCATION`) to provide accurate session geolocation. Raw GPS coordinates can have accuracy up to approximately 10 meters
+- **Opt-in only:** Location tagging is disabled by default. You must enable it in Settings and grant the matching Android permission. An additional in-app consent dialog is shown before any location data is collected
 - **Per-session capture:** Location is recorded **once** at session start using the device's last known location — there is no continuous or background tracking
-- **Anonymization option:** You can enable coordinate anonymization in Settings, which rounds GPS coordinates to approximately 111-meter accuracy. Without anonymization, full-precision coordinates are stored
+- **Additional anonymization for Precise mode:** When you choose Precise, the captured GPS coordinates are stored as received from the system. When you choose Approximate, the system itself returns a coarse fix; the Application also rounds the result to approximately 111-meter accuracy as a defense-in-depth measure
 - **On-device processing:** Reverse geocoding (converting coordinates to a human-readable location name) uses Android's built-in Geocoder API. On most devices with Google Play Services, this may involve a request to Google's geocoding service. Only the session-start coordinates are sent — no audio, noise measurements, or other app data is transmitted in this process
 - **Local storage only:** Location data is stored exclusively on your device in an encrypted database — it is never transmitted to any server
-- **Export control:** A separate setting controls whether location data is included in PDF/CSV exports. Note that exports include coordinates as stored at session time: full precision if anonymization was disabled during recording, or approximately 111-meter accuracy if anonymization was enabled. A "Location Privacy" label in each export indicates the precision level
+- **Export control:** A separate setting controls whether location data is included in PDF/CSV exports. Exports include coordinates at the precision they were captured. A "Location Privacy" label in each export indicates the precision level
 - **No background tracking:** The Application never accesses your location in the background or between sessions
 
 You can disable location tagging at any time in Settings. Previously captured location data is deleted when the associated session is deleted.
 
 ## Third-Party Data Sharing
 
-The Application does not collect or share personal information. Anonymous data collected by third-party services (Firebase Crashlytics, Firebase Analytics, AdMob, Google Play Billing, Google Play In-App Review) is processed by Google in accordance with [Google's Privacy Policy](https://policies.google.com/privacy).
+The Application does not collect or share personal information. Anonymous data collected by third-party services (Firebase Crashlytics, Firebase Analytics, AdMob, Google Play Billing, Google Play In-App Review, Google User Messaging Platform) is processed by Google in accordance with [Google's Privacy Policy](https://policies.google.com/privacy). For users in the EU/EEA, UK, and Switzerland, data flow to Firebase Analytics and AdMob is gated by your consent choice as described in **Ad and Analytics Consent** above.
 
 ## Data Retention
 
@@ -217,6 +255,16 @@ The Service Provider is committed to protecting your information through multipl
 - **Code protection:** Release builds use R8 code obfuscation and resource shrinking
 
 Since the Application processes audio locally and does not transmit personal data to our servers, there is minimal risk of unauthorized access to your noise monitoring information.
+
+## Health & Medical Disclaimer
+
+The Application is a noise-awareness and occupational-safety tool. **It is not a medical device.** It does not diagnose, treat, cure, prevent, or monitor any disease or health condition, including hearing loss or other hearing impairments.
+
+Noise measurements, noise-dose calculations, and compliance estimates (EU, OSHA, NIOSH, UK, Australia standards) are provided **for general awareness only**. Consumer smartphone microphones are not calibrated reference instruments, and readings are not a substitute for a professionally calibrated sound level meter or a formal occupational-hygiene assessment. Do not rely on the Application for legal compliance determinations, workplace safety certification, or medical decisions.
+
+If you have concerns about noise exposure or your hearing, consult a qualified healthcare professional (such as an audiologist) or a certified occupational-safety professional.
+
+Noise-exposure and dose data is stored only on your device. It is **never sold, never shared, and never used to make decisions about employment, insurance, or credit.**
 
 ## Hearing Safety Disclaimer
 
